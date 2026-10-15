@@ -1,26 +1,181 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Tailwind v4's `dark:` variant follows prefers-color-scheme by default. This
+   app lets the user override the OS setting, so the variant is redefined to
+   follow the `.dark` class on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   SupportFlow design tokens
+   ---------------------------------------------------------------------------
+   The whole product is themed from this block. Components reference semantic
+   names (`surface`, `ink`, `line`, `chip-warn-fg`) and never a raw colour, so
+   light and dark are two values of one system rather than two stylesheets.
+
+   Every foreground/background pair used for text was checked at >= 4.5:1 and
+   is re-verified on every CI run by the axe-core pass in
+   tests/e2e/accessibility.spec.ts.
+--------------------------------------------------------------------------- */
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+
+  --radius-panel: 0.75rem;
+  --radius-control: 0.5rem;
+
+  /* Indigo accent — distinct from PulseBoard's blue so the two projects do
+     not read as one template wearing two hats. */
+  --color-accent-100: #e8e5fb;
+  --color-accent-200: #cdc7f6;
+  --color-accent-300: #a79dee;
+  --color-accent-400: #8073e4;
+  --color-accent-500: #6250d6;
+  --color-accent-600: #4f3dc0;
+  --color-accent-700: #40319c;
+  --color-accent-800: #352a7d;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer theme {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --app-bg: #f7f7fb;
+    --app-surface: #ffffff;
+    --app-surface-muted: #f2f2f7;
+    --app-surface-raised: #ffffff;
+    --app-text: #1a1a24;
+    --app-text-muted: #4b4b5a;
+    --app-text-subtle: #5c5c6d;
+    --app-line: #e1e1ea;
+    --app-line-strong: #c9c9d6;
+    --app-shadow: 0 1px 2px rgb(20 20 40 / 0.06),
+      0 10px 28px -16px rgb(20 20 40 / 0.22);
+    --app-accent-tint: #ece9fc;
+    --app-accent-on-tint: #40319c;
+
+    /* Chips: explicit background / foreground / border triplets. Alpha-tinting
+       a hue and reusing it for the label is how status text ends up at 1.7:1. */
+    --chip-good-bg: #e4f4e4;
+    --chip-good-fg: #105c18;
+    --chip-good-br: #b9e0bd;
+    --chip-info-bg: #e6f0fe;
+    --chip-info-fg: #1a4fb0;
+    --chip-info-br: #b9d3fb;
+    --chip-warn-bg: #fdf2db;
+    --chip-warn-fg: #6b4105;
+    --chip-warn-br: #f2ddb0;
+    --chip-bad-bg: #fae8e8;
+    --chip-bad-fg: #8f1f1f;
+    --chip-bad-br: #f0c4c4;
+    --chip-neutral-bg: #f2f3f5;
+    --chip-neutral-fg: #4d535e;
+    --chip-neutral-br: #d9dbe0;
+  }
+
+  .dark {
+    --app-bg: #111119;
+    --app-surface: #191922;
+    --app-surface-muted: #21212c;
+    --app-surface-raised: #242430;
+    --app-text: #f3f3f7;
+    --app-text-muted: #adadbd;
+    --app-text-subtle: #9a9aab;
+    --app-line: #2e2e3b;
+    --app-line-strong: #3e3e4e;
+    --app-shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 12px 32px -18px rgb(0 0 0 / 0.7);
+    --app-accent-tint: #23203c;
+    --app-accent-on-tint: #bdb4f3;
+
+    --chip-good-bg: #16291b;
+    --chip-good-fg: #86e79c;
+    --chip-good-br: #2b4a33;
+    --chip-info-bg: #16233a;
+    --chip-info-fg: #a3c9f9;
+    --chip-info-br: #2b4068;
+    --chip-warn-bg: #2e2512;
+    --chip-warn-fg: #f5cd63;
+    --chip-warn-br: #4d3f1d;
+    --chip-bad-bg: #2c1e26;
+    --chip-bad-fg: #f5a4a4;
+    --chip-bad-br: #53303a;
+    --chip-neutral-bg: #242936;
+    --chip-neutral-fg: #b2b7c0;
+    --chip-neutral-br: #39404f;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-canvas: var(--app-bg);
+  --color-surface: var(--app-surface);
+  --color-surface-muted: var(--app-surface-muted);
+  --color-surface-raised: var(--app-surface-raised);
+  --color-ink: var(--app-text);
+  --color-muted: var(--app-text-muted);
+  --color-subtle: var(--app-text-subtle);
+  --color-line: var(--app-line);
+  --color-line-strong: var(--app-line-strong);
+  --color-accent-tint: var(--app-accent-tint);
+  --color-accent-on-tint: var(--app-accent-on-tint);
+  --color-chip-good-bg: var(--chip-good-bg);
+  --color-chip-good-fg: var(--chip-good-fg);
+  --color-chip-good-br: var(--chip-good-br);
+  --color-chip-info-bg: var(--chip-info-bg);
+  --color-chip-info-fg: var(--chip-info-fg);
+  --color-chip-info-br: var(--chip-info-br);
+  --color-chip-warn-bg: var(--chip-warn-bg);
+  --color-chip-warn-fg: var(--chip-warn-fg);
+  --color-chip-warn-br: var(--chip-warn-br);
+  --color-chip-bad-bg: var(--chip-bad-bg);
+  --color-chip-bad-fg: var(--chip-bad-fg);
+  --color-chip-bad-br: var(--chip-bad-br);
+  --color-chip-neutral-bg: var(--chip-neutral-bg);
+  --color-chip-neutral-fg: var(--chip-neutral-fg);
+  --color-chip-neutral-br: var(--chip-neutral-br);
+  --shadow-panel: var(--app-shadow);
+}
+
+@layer base {
+  html { color-scheme: light; }
+  html.dark { color-scheme: dark; }
+
+  body {
+    background-color: var(--app-bg);
+    color: var(--app-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* One visible focus ring for every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Preserve newlines in customer and agent messages without allowing HTML. */
+  .message-body { white-space: pre-wrap; overflow-wrap: anywhere; }
 }
