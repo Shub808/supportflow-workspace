@@ -13,7 +13,7 @@ full-text knowledge base, and an AI assistant that works with no API key.
 
 | | |
 |---|---|
-| **Live demo** | _not yet deployed — see [Deployment](#deployment)_ |
+| **Live demo** | [supportflow-workspace.vercel.app](https://supportflow-workspace.vercel.app) |
 | **Stack** | Next.js 16 (App Router, RSC + Server Actions) · React 19 · TypeScript 5 (strict+) · Tailwind CSS 4 · Zod 4 · SQLite via `node:sqlite` (incl. FTS5) |
 | **Tests** | 90 unit / integration (Vitest) + 37 end-to-end (Playwright), including 9 automated axe-core accessibility scans |
 | **Quality gates** | `tsc --noEmit` · ESLint 9 flat config · Vitest · Playwright · `next build` — all green, all run in CI |
