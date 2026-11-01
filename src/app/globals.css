@@ -179,3 +179,18 @@
   /* Preserve newlines in customer and agent messages without allowing HTML. */
   .message-body { white-space: pre-wrap; overflow-wrap: anywhere; }
 }
+
+/* Authorship mark: visible, non-interactive, not part of the accessibility tree. */
+body::after {
+  content: "\00a9  2026 Shubham Naik \00b7  Portfolio project";
+  position: fixed;
+  right: 10px;
+  bottom: 6px;
+  z-index: 50;
+  font: 500 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.02em;
+  color: currentColor;
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
